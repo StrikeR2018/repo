@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Error! Does not compute!!!</title>
+    
+</head>
+<body>
+    <h1>You've Errored Out!</h1>
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('customers') }}">Customers</a>
+        <a href="{{ url_for('packages') }}">Packages</a>
+        <a href="{{ url_for('planets') }}">Planets</a>
+        <a href="{{ url_for('shipment_invoices') }}">Shipment Invoices</a>
+        <a href="{{ url_for('shipment_types') }}">Shipment Types</a>
+      </nav>
+    <br>
+    <p>
+        You are likely here because you attempted to delete a planet an active customer lives on.
+        Please check the customer list and safely remove any customers on the planet first.
+    </p>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+    <title>Planets</title>
+    <title> somthing here </title>
+</head>
+<body>
+  <h1> Shipment Invoices </h1>
+  <nav>
+    <a href="index">Home</a>
+    <a href="customers">Customers</a>
+    <a href="packages">Packages</a>
+    <a href="planets">Planets</a>
+    <a href ="shipment_invoices">Shipment Invoices</a>
+    <a href="shipment_types">Shipment Types</a>
+  </nav>
+  <br>
+
+  <div id="view">
+    <table>
+        <!-- Access data tuple passed from app.py --> 
+        {% if data %}
+            <thead>
+                <tr>
+                    <!-- Iterate through each key in the first entry to get the column name -->
+                    {% for key in data[0].keys() %}
+                    
+                    <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                
+                    <!-- End of this for loop -->
+                    {% endfor %} 
+                </tr>
+
+            <tbody>
+                <!-- Now, iterate through every item in data -->{% for item in data %}
+                    <tr>
+                        <!-- Then iterate through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+
+                        <!-- Create a <td> element with the value of that key in it -->
+                        <td> {{item[key]}} </td> 
+                        {% endfor %}
+
+                        <td><a href="update_shipment_invoice/{{item.id}}" class="btn btn-default edit-btn">Edit</a></td>
+						<td><a href="delete_shipment_invoice/{{item.invoice_id}}" class="btn btn-default">Delete</a></td>
+
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+    </table>
+
+<!-- Event Listener to populate the form with the info to update -->
+<script>
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the link from redirecting
+
+            const row = button.parentElement.parentElement;
+            const invoice_id = row.cells[0].textContent;
+            const cost = row.cells[1].textContent;
+            const planet_id = row.cells[2].textContent;
+            const customer_id = row.cells[3].textContent;
+            const shipment_type_id = row.cells[4].textContent;
+
+            // Populate the fields of the edit form
+            const form = document.querySelector('#updateShipmentInvoice');
+            form.elements['invoice_id'].value = invoice_id;
+            form.elements['cost'].value = cost;
+        });
+    });
+</script>
+
+<div id="update">
+     <form method="POST" id="updateShipmentInvoice">
+        <legend>Update a Shipment Invoice:</legend>
+        <fieldset class="fields">
+            <label for="invoice_id"></label>
+            <input type="hidden" name="invoice_id" value=>
+
+            <label for="cost">Cost</label>
+            <input type="number" name="cost" min="0" step="1.0" required>
+
+            <label for="planet_id">Planet/Destination</label>
+            <select name="planet_id" required>
+                <option value="" disabled selected>Select a planet</option>
+
+                {% for planet in planets %}
+                    {% if planet['planet_id'] == planet_id %}
+                        <option value="{{ planet['planet_id'] }}" selected>{{ planet['planet_name'] }}</option>
+                    {% else %}
+                        <option value="{{ planet['planet_id'] }}">{{ planet['planet_name'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <label for="customer_id">Sender</label>
+            <select name="customer_id">
+                <option value="" disabled selected>Select a Sender</option>
+                <option value ="0"></option>
+
+                {% for customer in customers %}
+                    {% if customer['customer_id'] == customer_id %}
+                        <option value="{{ customer['customer_id'] }}" selected>{{ customer['customer_name'] }}</option>
+                    {% else %}
+                        <option value="{{ customer['customer_id'] }}">{{ customer['customer_name'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+                <label for="shipment_type_id">Shipping</label>
+            <select name="shipment_type_id" required>
+                <option value="" disabled selected>Select a Shipping</option>
+
+                {% for shipment_type in shipment_types %}
+                    {% if shipment_type['shipment_type_id'] == shipment_type_id %}
+                        <option value="{{ shipment_type['shipment_type_id'] }}" selected>{{ shipment_type['shipment_time'] }}</option>
+                    {% else %}
+                        <option value="{{ shipment_type['shipment_type_id'] }}">{{ shipment_type['shipment_time'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>            
+        </fieldset>
+        <input class ="btn" type="submit" value="Update Shipment Invoice" name="Update_Shipment_Invoice">
+
+     </form>
+</div>
+
+<div id="insert">
+     <form method="POST" action="/add_shipment_invoice" id="addShipmentInvoice">
+        <legend>Add a Shipment Invoice:</legend>
+        <fieldset class="fields">
+            <label for="cost">Cost</label>
+            <input type="number" name="cost" min="0" step="1.0" required>
+
+            <label for="planet_id">Planet/Destination</label>
+            <select name="planet_id" required>
+                <option value="" disabled selected>Select a planet</option>
+
+                {% for planet in planets %}
+                    {% if planet['planet_id'] == planet_id %}
+                        <option value="{{ planet['planet_id'] }}" selected>{{ planet['planet_name'] }}</option>
+                    {% else %}
+                        <option value="{{ planet['planet_id'] }}">{{ planet['planet_name'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <label for="customer_id">Sender</label>
+            <select name="customer_id">
+                <option value="" disabled selected>Select a Sender</option>
+                <option value ="0"></option>
+
+                {% for customer in customers %}
+                    {% if customer['customer_id'] == customer_id %}
+                        <option value="{{ customer['customer_id'] }}" selected>{{ customer['customer_name'] }}</option>
+                    {% else %}
+                        <option value="{{ customer['customer_id'] }}">{{ customer['customer_name'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+                <label for="shipment_type_id">Shipping</label>
+            <select name="shipment_type_id" required>
+                <option value="" disabled selected>Select a Shipping</option>
+
+                {% for shipment_type in shipment_types %}
+                    {% if shipment_type['shipment_type_id'] == shipment_type_id %}
+                        <option value="{{ shipment_type['shipment_type_id'] }}" selected>{{ shipment_type['shipment_time'] }}</option>
+                    {% else %}
+                        <option value="{{ shipment_type['shipment_type_id'] }}">{{ shipment_type['shipment_time'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>            
+        </fieldset>
+        <input class ="btn" type="submit" value="Add Shipment Invoice" name="Add_Shipment_Invoice">
+
+     </form>
+</div>

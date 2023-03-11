@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+    <title>Planets</title>
+    <title> somthing here </title>
+</head>
+<body>
+  <h1> Shipment Types </h1>
+  <nav>
+    <a href="index">Home</a>
+    <a href="customers">Customers</a>
+    <a href="packages">Packages</a>
+    <a href="planets">Planets</a>
+    <a href ="shipment_invoices">Shipment Invoices</a>
+    <a href="shipment_types">Shipment Types</a>
+  </nav>
+  <br>
+
+  <div id="view">
+    <table>
+        <!-- Access data tuple passed from app.py --> 
+        {% if data %}
+            <thead>
+                <tr>
+                    <!-- Iterate through each key in the first entry to get the column name -->
+                    {% for key in data[0].keys() %}
+                    
+                    <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                
+                    <!-- End of this for loop -->
+                    {% endfor %} 
+                </tr>
+
+            <tbody>
+                <!-- Now, iterate through every item in data -->{% for item in data %}
+                    <tr>
+                        <!-- Then iterate through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+
+                        <!-- Create a <td> element with the value of that key in it -->
+                        <td> {{item[key]}} </td> 
+                        {% endfor %}
+						
+
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+    </table>
+
+<div id="insert">
+    <form method="POST" action="/shipment_types" id="addShipmentType">
+        <legend>Add a Shipment Type:</legend>
+        <fieldset class="fields">
+        
+            <label for="shipment_time">Shipment Time</label>
+            <input type="text" name="shipment_time" required>
+
+            <label for="is_active"> is active (True(1)/Fasle(0))</label>
+            <input type="number" name="is_active" min="0" step="1.0" max ="1" required>
+            
+        </fieldset>
+        <input class ="btn" type="submit" value="Add Shipment Type" name="Add_Shipment_Type">
+    </form>
+</div>   
